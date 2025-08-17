@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notifier Bark</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: #e0f7fa;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #00796b;
+    }
+
+    select, input, button {
+      margin: 10px;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #00796b;
+    }
+
+    button {
+      background-color: #00796b;
+      color: white;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background-color: #004d40;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Notifier Bark</h1>
+
+  <label for="recipient">Destinataire :</label>
+  <select id="recipient">
+    <option value="TOKEN_DENIS">Denis</option>
+    <option value="TOKEN_NATHAN">Nathan</option>
+  </select>
+
+  <input type="text" id="message" placeholder="Tape ton message ici !" size="50">
+
+  <button onclick="sendNotification()">Envoyer la notif</button>
+
+  <script>
+    const TITLE = "Nathan";
+    const ICON_URL = "https://cdn.dribbble.com/userupload/43750678/file/original-af98d4371f78a4f9e0d160586c6cb804.png?resize=752x&vertical=center";
+
+    // Tokens directement dans le JS
+    const TOKENS = {
+      "TOKEN_DENIS": "F4bjc8i4xLbeLT86HHuZbM",
+      "TOKEN_NATHAN": "whwNx3muiHRPLxDVnaXeHj"
+    };
+
+    function sendNotification() {
+      const recipientKey = document.getElementById('recipient').value;
+      const message = document.getElementById('message').value;
+
+      if (!message) {
+        alert("Veuillez écrire un message !");
+        return;
+      }
+
+      const token = TOKENS[recipientKey];
+      if (!token) {
+        alert("Token invalide !");
+        return;
+      }
+
+      // Construction de l'URL directe
+      const url = `https://api.day.app/${token}/${encodeURIComponent(TITLE)}/${encodeURIComponent(message)}?icon=${encodeURIComponent(ICON_URL)}`;
+
+      // On ouvre l'URL dans un nouvel onglet → CORS ignoré
+      window.open(url, "_blank");
+
+      document.getElementById('message').value = "";
+    }
+  </script>
+
+</body>
+</html>
