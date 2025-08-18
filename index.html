@@ -1,112 +1,73 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notifier Bark</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zilo</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      background: #e0f7fa;
-    }
-    h1, h2 {
-      color: #00796b;
-      margin-bottom: 10px;
-    }
-    select, input, button {
-      margin: 10px;
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 8px;
-      border: 1px solid #00796b;
-    }
-    button {
-      background-color: #00796b;
-      color: white;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    button:hover {
-      background-color: #004d40;
-    }
+    body { font-family: Arial, sans-serif; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; background:#e0f7fa; }
+    h1, h2 { color:#00796b; margin:6px 0; }
+    select, input, button { margin:8px; padding:10px; font-size:16px; border-radius:8px; border:1px solid #00796b; }
+    button { background:#00796b; color:#fff; cursor:pointer; }
+    button:hover{ background:#004d40; }
+    .row{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; justify-content:center; }
+    .card { background:#fff; padding:24px; border-radius:16px; box-shadow:0 6px 18px rgba(0,0,0,0.08); }
   </style>
 </head>
 <body>
+  <div class="card">
+    <h1>Zilo</h1>
+    <h2 id="welcome">Connecté</h2>
 
-  <h1>Zilo</h1>
-  <h2 id="welcome">Connecté en tant que : </h2>
+    <div class="row">
+      <label for="recipient">Destinataire :</label>
+      <select id="recipient">
+        <option value="denis">Denis</option>
+        <option value="nathan">Nathan</option>
+      </select>
+    </div>
 
-  <label for="recipient">Destinataire :</label>
-  <select id="recipient">
-    <option value="TOKEN_DENIS">Denis</option>
-    <option value="TOKEN_NATHAN">Nathan</option>
-  </select>
-
-  <input type="text" id="message" placeholder="Tape ton message ici !" size="50">
-  <button onclick="sendNotification()">Envoyer la notif</button>
-  <button onclick="logout()">Se déconnecter</button>
+    <div class="row">
+      <input id="message" type="text" placeholder="Tape ton message ici !" size="40" />
+      <button id="send">Envoyer la notif</button>
+      <button id="logout">Se déconnecter</button>
+    </div>
+  </div>
 
   <script>
-    if (localStorage.getItem("loggedIn") !== "true") {
-      window.location.replace("login.html");
-    }
+    const messageInput = document.getElementById('message');
 
-    const username = localStorage.getItem("username");
-    if (username) {
-      document.getElementById("welcome").innerText = "Connecté en tant que " + username;
-    }
+    async function send(){
+      const recipient = document.getElementById('recipient').value;
+      const message = messageInput.value.trim();
+      if(!message){ alert('Écris un message !'); return; }
 
-    const ICON_URL = "https://cdn.dribbble.com/userupload/43750678/file/original-af98d4371f78a4f9e0d160586c6cb804.png?resize=752x&vertical=center";
-    const TOKENS = {
-      "TOKEN_DENIS": "F4bjc8i4xLbeLT86HHuZbM",
-      "TOKEN_NATHAN": "whwNx3muiHRPLxDVnaXeHj"
-    };
-
-    const messageInput = document.getElementById("message");
-    messageInput.addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        sendNotification();
+      const res = await fetch('/api/send', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ recipient, message })
+      });
+      const data = await res.json();
+      if(data.ok){
+        messageInput.value = '';
+        alert('Notification envoyée !');
+      } else {
+        if(res.status === 401){
+          // non connecté → renvoie vers la connexion
+          window.location.href = '/login.html';
+        } else {
+          alert('Erreur : ' + (data.error||'inconnue'));
+        }
       }
-    });
-
-    function sendNotification() {
-      const recipientKey = document.getElementById('recipient').value;
-      const message = messageInput.value;
-
-      if (!message) {
-        alert("Veuillez écrire un message !");
-        return;
-      }
-
-      const token = TOKENS[recipientKey];
-      if (!token) {
-        alert("Token invalide !");
-        return;
-      }
-
-      const url = `https://api.day.app/${token}/${encodeURIComponent(username)}/${encodeURIComponent(message)}?icon=${encodeURIComponent(ICON_URL)}`;
-
-      const iframe = document.createElement("iframe");
-      iframe.style.display = "none";
-      iframe.src = url;
-      document.body.appendChild(iframe);
-
-      messageInput.value = "";
-      alert("Notification envoyée !");
     }
 
-    function logout() {
-      localStorage.removeItem("loggedIn");
-      localStorage.removeItem("username");
-      window.location.replace("login.html");
+    async function logout(){
+      await fetch('/api/logout');
+      window.location.href = '/login.html';
     }
+
+    document.getElementById('send').addEventListener('click', send);
+    document.getElementById('logout').addEventListener('click', logout);
+    messageInput.addEventListener('keydown', e => { if(e.key==='Enter') send(); });
   </script>
-
 </body>
 </html>
