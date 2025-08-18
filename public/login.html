@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Connexion — Zilo</title>
+  <style>
+    body { font-family: Arial, sans-serif; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; background:#e0f7fa; }
+    h1 { color:#00796b; margin-bottom: 12px; }
+    input, button { margin:8px; padding:10px; font-size:16px; border-radius:8px; border:1px solid #00796b; }
+    button { background:#00796b; color:#fff; cursor:pointer; }
+    button:hover { background:#004d40; }
+    .card { background:#fff; padding:24px; border-radius:16px; box-shadow:0 6px 18px rgba(0,0,0,0.08); }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Connexion</h1>
+    <input id="username" type="text" placeholder="Identifiant" />
+    <input id="password" type="password" placeholder="Mot de passe" />
+    <button id="btnLogin">Se connecter</button>
+  </div>
+
+  <script>
+    const u = document.getElementById('username');
+    const p = document.getElementById('password');
+    const b = document.getElementById('btnLogin');
+
+    async function login(){
+      const username = u.value.trim();
+      const password = p.value.trim();
+      const res = await fetch('/api/login', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ username, password })
+      });
+      const data = await res.json();
+      if(data.ok){
+        window.location.href = '/index.html';
+      } else {
+        alert(data.error || 'Erreur de connexion');
+      }
+    }
+
+    b.addEventListener('click', login);
+    [u,p].forEach(el => el.addEventListener('keydown', e => { if(e.key==='Enter') login(); }));
+  </script>
+</body>
+</html>
