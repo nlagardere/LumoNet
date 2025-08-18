@@ -2,7 +2,11 @@ import jwt from "jsonwebtoken";
 
 export default async function handler(req, res) {
   console.log("API /api/send appelée ! Méthode :", req.method);
+// TEMPORAIRE pour test uniquement
+let payload = { u: "testuser" };
+// Supprime la vérification JWT et cookie
 
+  
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Méthode non autorisée" });
   }
