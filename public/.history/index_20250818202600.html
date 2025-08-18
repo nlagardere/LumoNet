@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zilo</title>
+  <style>
+    body { 
+      font-family: Arial, sans-serif;
+      margin:0;
+      padding:0;
+      min-height:100vh;
+      background:#e0f7fa;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      padding-top:40px; /* espace en haut pour le header */
+    }
+
+    h1, h2 { 
+      color:#00796b;
+      margin:6px 0;
+      text-align:center;
+    }
+
+    h1 {
+      font-size:2.5em;
+    }
+
+    h2 {
+      font-size:1.2em;
+      margin-bottom:24px;
+    }
+
+    .card { 
+      background:#fff; 
+      padding:24px; 
+      border-radius:16px; 
+      box-shadow:0 6px 18px rgba(0,0,0,0.08);
+      width:80%;
+      max-width:400px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      margin-left: 5%;
+      margin-right: 5%;
+    }
+
+    .row { 
+      display:flex; 
+      gap:8px; 
+      flex-wrap:wrap; 
+      align-items:center; 
+      justify-content:center; 
+      width:100%;
+      margin-bottom:12px;
+    }
+
+    select, input, button { 
+      margin:4px 0; 
+      padding:10px; 
+      font-size:16px; 
+      border-radius:8px; 
+      border:1px solid #00796b; 
+      flex:1;
+      min-width:100px;
+    }
+
+    button { 
+      background:#00796b; 
+      color:#fff; 
+      cursor:pointer; 
+      transition: background 0.3s;
+    }
+
+    button:hover { 
+      background:#004d40; 
+    }
+
+    @media (max-width: 500px) {
+      h1 { font-size:2em; }
+      h2 { font-size:1em; }
+      input, select, button { font-size:14px; padding:8px; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Zilo</h1>
+  <h2 id="welcome">Connecté</h2>
+
+  <div class="card">
+    <div class="row">
+      <label for="recipient">Destinataire :</label>
+      <select id="recipient">
+        <option value="denis">Denis</option>
+        <option value="nathan">Nathan</option>
+      </select>
+    </div>
+
+    <div class="row">
+      <input id="message" type="text" placeholder="Tape ton message ici !" />
+      <button id="send">Envoyer la notif</button>
+    </div>
+  </div>
+
+  <script>
+    const messageInput = document.getElementById('message');
+
+    async function send(){
+      const recipient = document.getElementById('recipient').value;
+      const message = messageInput.value.trim();
+      if(!message){ alert('Écris un message !'); return; }
+
+      const res = await fetch('/api/send', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ recipient, message })
+      });
+      const data = await res.json();
+      if(data.ok){
+        messageInput.value = '';
+        alert('Notification envoyée !');
+      } else {
+        if(res.status === 401){
+          window.location.href = '/login.html';
+        } else {
+          alert('Erreur : ' + (data.error||'inconnue'));
+        }
+      }
+    }
+
+    async function logout(){
+      await fetch('/api/logout');
+      window.location.href = '/login.html';
+    }
+
+    document.getElementById('send').addEventListener('click', send);
+    document.getElementById('logout').addEventListener('click', logout);
+    messageInput.addEventListener('keydown', e => { if(e.key==='Enter') send(); });
+  </script>
+</body>
+</html>
