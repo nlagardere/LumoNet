@@ -5,17 +5,25 @@ async function send() {
     return;
   }
 
-  // Ajout local du message
+  // Vérif du destinataire
+  console.log(">>> currentRecipient =", currentRecipient);
+
+  // Ajout local
   addMessage(message, true);
   chatMessage.value = '';
+
+  const body = { recipient: currentRecipient, message };
+  console.log(">>> body envoyé :", body);
 
   const res = await fetch('/api/send', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ recipient: currentRecipient, message })
+    body: JSON.stringify(body)
   });
 
   const data = await res.json();
+  console.log(">>> réponse serveur :", data);
+
   if (!data.ok) {
     if (res.status === 401) {
       window.location.href = '/login.html';
