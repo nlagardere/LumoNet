@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: #e0f7fa;
+    }
+    h1 {
+      margin-bottom: 20px;
+      color: #00796b;
+    }
+    input, button {
+      margin: 10px;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #00796b;
+    }
+    button {
+      background-color: #00796b;
+      color: white;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    button:hover {
+      background-color: #004d40;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Connexion</h1>
+
+  <input type="text" id="username" placeholder="Nom d'utilisateur">
+  <button onclick="login()">Se connecter</button>
+
+  <script>
+    const users = ["admin", "nathan", "estelle", "denis"];
+    const input = document.getElementById("username");
+
+    function login() {
+      const username = input.value.trim();
+
+      if (users.includes(username)) {
+        localStorage.setItem("loggedIn", "true");
+        localStorage.setItem("username", username);
+        window.location.href = "index.html";
+      } else {
+        alert("Accès refusé !");
+      }
+    }
+
+    input.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        login();
+      }
+    });
+  </script>
+
+</body>
+</html>

@@ -14,12 +14,10 @@
       height: 100vh;
       background: #e0f7fa;
     }
-
-    h1 {
-      margin-bottom: 20px;
+    h1, h2 {
       color: #00796b;
+      margin-bottom: 10px;
     }
-
     select, input, button {
       margin: 10px;
       padding: 10px;
@@ -27,14 +25,12 @@
       border-radius: 8px;
       border: 1px solid #00796b;
     }
-
     button {
       background-color: #00796b;
       color: white;
       cursor: pointer;
       transition: 0.2s;
     }
-
     button:hover {
       background-color: #004d40;
     }
@@ -42,7 +38,8 @@
 </head>
 <body>
 
-  <h1>Notifier Bark</h1>
+  <h1>Zilo</h1>
+  <h2 id="welcome">Connecté en tant que : </h2>
 
   <label for="recipient">Destinataire :</label>
   <select id="recipient">
@@ -51,22 +48,36 @@
   </select>
 
   <input type="text" id="message" placeholder="Tape ton message ici !" size="50">
-
   <button onclick="sendNotification()">Envoyer la notif</button>
+  <button onclick="logout()">Se déconnecter</button>
 
   <script>
-    const TITLE = "Nathan";
-    const ICON_URL = "https://cdn.dribbble.com/userupload/43750678/file/original-af98d4371f78a4f9e0d160586c6cb804.png?resize=752x&vertical=center";
+    if (localStorage.getItem("loggedIn") !== "true") {
+      window.location.replace("login.html");
+    }
 
-    // Tokens directement dans le JS
+    const username = localStorage.getItem("username");
+    if (username) {
+      document.getElementById("welcome").innerText = "Connecté en tant que " + username;
+    }
+
+    const ICON_URL = "https://cdn.dribbble.com/userupload/43750678/file/original-af98d4371f78a4f9e0d160586c6cb804.png?resize=752x&vertical=center";
     const TOKENS = {
       "TOKEN_DENIS": "F4bjc8i4xLbeLT86HHuZbM",
       "TOKEN_NATHAN": "whwNx3muiHRPLxDVnaXeHj"
     };
 
+    const messageInput = document.getElementById("message");
+    messageInput.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        sendNotification();
+      }
+    });
+
     function sendNotification() {
       const recipientKey = document.getElementById('recipient').value;
-      const message = document.getElementById('message').value;
+      const message = messageInput.value;
 
       if (!message) {
         alert("Veuillez écrire un message !");
@@ -79,13 +90,21 @@
         return;
       }
 
-      // Construction de l'URL directe
-      const url = `https://api.day.app/${token}/${encodeURIComponent(TITLE)}/${encodeURIComponent(message)}?icon=${encodeURIComponent(ICON_URL)}`;
+      const url = `https://api.day.app/${token}/${encodeURIComponent(username)}/${encodeURIComponent(message)}?icon=${encodeURIComponent(ICON_URL)}`;
 
-      // On ouvre l'URL dans un nouvel onglet → CORS ignoré
-      window.open(url, "_blank");
+      const iframe = document.createElement("iframe");
+      iframe.style.display = "none";
+      iframe.src = url;
+      document.body.appendChild(iframe);
 
-      document.getElementById('message').value = "";
+      messageInput.value = "";
+      alert("Notification envoyée !");
+    }
+
+    function logout() {
+      localStorage.removeItem("loggedIn");
+      localStorage.removeItem("username");
+      window.location.replace("login.html");
     }
   </script>
 
