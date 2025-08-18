@@ -1,10 +1,30 @@
 import jwt from "jsonwebtoken";
 
 export default async function handler(req, res) {
+  console.log("API /api/send appelée ! Méthode :", req.method);
+
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Méthode non autorisée" });
   }
 
+  // --- Body JSON parsing sûr ---
+  let body = req.body;
+  if (typeof body === "string") {
+    try {
+      body = JSON.parse(body);
+    } catch (e) {
+      return res.status(400).json({ error: "Body JSON invalide" });
+    }
+  }
+
+  const { recipient, message } = body || {};
+  console.log("Body reçu :", body);
+
+  if (!recipient || !message) {
+    return res.status(400).json({ error: "recipient et message requis" });
+  }
+
+  // --- Vérification JWT ---
   const cookieHeader = req.headers.cookie || "";
   const cookies = Object.fromEntries(
     cookieHeader.split("; ").filter(Boolean).map(c => c.split("=").map(decodeURIComponent))
@@ -22,37 +42,25 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: "Session invalide" });
   }
 
-  const { recipient, message } = req.body || {};
-  if (!recipient || !message) {
-    return res.status(400).json({ error: "recipient et message requis" });
-  }
-
-  // --- Tokens Bark (backend uniquement) ---
+  // --- Tokens Bark ---
   const BARK = {
     denis: process.env.BARK_TOKEN_DENIS,
     nathan: process.env.BARK_TOKEN_NATHAN,
-    // ajoute d'autres si besoin…
   };
-
   console.log("BARK tokens disponibles :", BARK);
   console.log("Clé recherchée :", recipient, "=>", BARK[recipient]);
-
-
-  console.log("Recipient reçu :", recipient);
-  console.log("BARK disponibles :", BARK);
 
   const barkToken = BARK[recipient];
   if (!barkToken) return res.status(400).json({ error: `Destinataire inconnu ou token manquant pour '${recipient}'` });
 
+  // --- Préparer et envoyer la notification ---
   const ICON_URL = process.env.ICON_URL || "";
   const title = encodeURIComponent(payload.u);
   const bodyEncoded = encodeURIComponent(message);
   const iconParam = ICON_URL ? `&icon=${encodeURIComponent(ICON_URL)}` : "";
   const url = `https://api.day.app/${barkToken}/${title}/${bodyEncoded}?isArchive=1${iconParam}`;
 
-
-  console.log("Méthode reçue :", req.method);
-  console.log("Body reçu :", req.body);
+  console.log("URL Bark :", url);
 
   try {
     const r = await fetch(url);
