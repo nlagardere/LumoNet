@@ -34,6 +34,10 @@ export default async function handler(req, res) {
     // ajoute d'autres si besoin…
   };
 
+  console.log("BARK tokens disponibles :", BARK);
+  console.log("Clé recherchée :", recipient, "=>", BARK[recipient]);
+
+
   console.log("Recipient reçu :", recipient);
   console.log("BARK disponibles :", BARK);
 
@@ -45,6 +49,10 @@ export default async function handler(req, res) {
   const bodyEncoded = encodeURIComponent(message);
   const iconParam = ICON_URL ? `&icon=${encodeURIComponent(ICON_URL)}` : "";
   const url = `https://api.day.app/${barkToken}/${title}/${bodyEncoded}?isArchive=1${iconParam}`;
+
+
+  console.log("Méthode reçue :", req.method);
+  console.log("Body reçu :", req.body);
 
   try {
     const r = await fetch(url);
