@@ -209,6 +209,9 @@ async function send() {
   const body = { recipient: currentRecipient, message };
   console.log("Envoi au backend :", body);
 
+  console.log("currentRecipient =", `"${currentRecipient}"`);
+  console.log("message =", `"${chatMessage.value.trim()}"`);
+  
   try {
     const res = await fetch('/api/send', {
       method: 'POST',
