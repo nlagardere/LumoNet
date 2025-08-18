@@ -161,7 +161,7 @@
   <div class="messages" id="messages"></div>
   <div class="chat-input">
     <input type="text" id="recipient" placeholder="Tape ton message ici !" />
-    <button id="sendBtn">Envoyer</button>
+    <button id="sendBtn" type="button">Envoyer</button> 
   </div>
 </div>
 
@@ -211,13 +211,13 @@ async function send() {
 
   console.log("currentRecipient =", `"${currentRecipient}"`);
   console.log("message =", `"${chatMessage.value.trim()}"`);
-  
+
   try {
-    const res = await fetch('/api/send', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
+const res = await fetch('/api/send', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ recipient: currentRecipient, message: chatMessage.value.trim() })
+});
 
     const data = await res.json();
     console.log("Réponse serveur :", data);
