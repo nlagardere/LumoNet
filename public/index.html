@@ -170,6 +170,10 @@
   const messagesContainer = document.getElementById('messages');
   const chatMessage = document.getElementById('recipient');
   const welcome = document.getElementById('welcome');
+  const BARK = {
+      denis: process.env.BARK_TOKEN_DENIS,
+      nathan: process.env.BARK_TOKEN_NATHAN
+      };
 
   let currentRecipient = '';
 
