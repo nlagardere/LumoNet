@@ -1,3 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zilo - Messagerie</title>
+  <style>
+    body {
+      margin:0;
+      font-family: Arial, sans-serif;
+      background:#e0f7fa;
+      overflow:hidden;
+      height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+
+    header {
+      padding:20px;
+      text-align:center;
+      background:#00796b;
+      color:white;
+      font-size:1.5em;
+    }
+
+    .screen {
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      width:100%;
+      position:relative;
+    }
+
+    /* --- Destinataires plein écran --- */
+    .contacts {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+      gap:20px;
+      width:90%;
+      max-width:600px;
+    }
+
+    .contact-card {
+      background:white;
+      padding:30px 10px;
+      border-radius:16px;
+      box-shadow:0 6px 18px rgba(0,0,0,0.08);
+      text-align:center;
+      cursor:pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-size:1.2em;
+      font-weight:bold;
+      color:#00796b;
+    }
+
+    .contact-card:hover {
+      transform: translateY(-5px);
+      box-shadow:0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    /* --- Chat --- */
+    .chat {
+      display:none;
+      flex-direction:column;
+      justify-content:flex-end;
+      height:100%;
+      width:100%;
+      padding:20px;
+      box-sizing:border-box;
+    }
+
+    .messages {
+      flex:1;
+      overflow-y:auto;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-bottom:20px;
+    }
+
+    .message {
+      max-width:70%;
+      padding:10px 15px;
+      border-radius:16px;
+      background:#fff;
+      box-shadow:0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .message.me {
+      align-self:flex-end;
+      background:#00796b;
+      color:white;
+    }
+
+    .chat-input {
+      display:flex;
+      gap:10px;
+    }
+
+    .chat-input input {
+      flex:1;
+      padding:10px;
+      border-radius:16px;
+      border:1px solid #00796b;
+      font-size:16px;
+    }
+
+    .chat-input button {
+      padding:10px 20px;
+      border:none;
+      border-radius:16px;
+      background:#00796b;
+      color:white;
+      cursor:pointer;
+      transition:background 0.3s;
+    }
+
+    .chat-input button:hover { background:#004d40; }
+
+    .back-btn {
+      position:absolute;
+      top:20px;
+      left:20px;
+      padding:10px 15px;
+      border:none;
+      border-radius:16px;
+      background:#00796b;
+      color:white;
+      cursor:pointer;
+      transition: background 0.3s;
+    }
+
+    .back-btn:hover { background:#004d40; }
+
+    @media(max-width:500px){
+      .contact-card { padding:20px 5px; font-size:1em; }
+      .chat-input input { font-size:14px; }
+      .chat-input button { font-size:14px; padding:8px 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>Zilo</header>
+
+<div class="screen" id="contactsScreen">
+  <div class="contacts">
+    <div class="contact-card" data-name="Denis">Denis</div>
+    <div class="contact-card" data-name="Nathan">Nathan</div>
+    <div class="contact-card" data-name="Alice">Alice</div>
+    <div class="contact-card" data-name="Bob">Bob</div>
+  </div>
+</div>
+
+<div class="screen chat" id="chatScreen">
+  <button class="back-btn" id="backBtn">← Retour</button>
+  <h2 id="welcome"></h2> <!-- <== ici -->
+  <div class="messages" id="messages"></div>
+  <div class="chat-input">
+    <input type="text" id="recipient" placeholder="Tape ton message ici !" />
+    <button id="sendBtn">Envoyer</button>
+  </div>
+</div>
+
+<script>
+  const contactsScreen = document.getElementById('contactsScreen');
+  const chatScreen = document.getElementById('chatScreen');
+  const messagesContainer = document.getElementById('messages');
+  const chatMessage = document.getElementById('recipient');
+  const welcome = document.getElementById('welcome');
+
+  let currentRecipient = '';
+
+  // Quand on clique sur une card, on ouvre le chat avec ce destinataire
+  document.querySelectorAll('.contact-card').forEach(card => {
+    card.addEventListener('click', () => {
+      currentRecipient = card.dataset.name.toLowerCase(); // correspond aux valeurs "denis", "nathan"
+      contactsScreen.style.display = 'none';
+      chatScreen.style.display = 'flex';
+      messagesContainer.innerHTML = '';
+      welcome.textContent = `Chat avec ${card.dataset.name}`;
+    });
+  });
+
+  // Bouton retour
+  document.getElementById('backBtn').addEventListener('click', () => {
+    chatScreen.style.display = 'none';
+    contactsScreen.style.display = 'flex';
+    currentRecipient = '';
+  });
+
+  // Ajouter un message localement dans le chat
+  function addMessage(text, me=true){
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'message ' + (me ? 'me' : '');
+    msgDiv.textContent = text;
+    messagesContainer.appendChild(msgDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+
+  // Fonction d’envoi existante adaptée
 async function send() {
   const message = chatMessage.value.trim();
   if (!message) {
@@ -32,3 +235,13 @@ async function send() {
     }
   }
 }
+
+
+
+  document.getElementById('sendBtn').addEventListener('click', send);
+  chatMessage.addEventListener('keydown', e => { if(e.key==='Enter') send(); });
+
+</script>
+
+</body>
+</html>
