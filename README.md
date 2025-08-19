@@ -1,6 +1,6 @@
 # LumoNet
 
-![GitHub repo size](https://img.shields.io/github/repo-size/nlagardere/LumoNet)
+![GitHub repo size](https://img.shields.io/github/repo-size/nlagardere/LumoNet?style=for-the-badge&logo=github&color=yellow)
 ![Stars](https://img.shields.io/github/stars/nlagardere/LumoNet?style=for-the-badge&logo=github&color=green)
 ![License](https://img.shields.io/github/license/nlagardere/LumoNet?style=for-the-badge&color=blue)
 
