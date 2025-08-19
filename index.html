@@ -136,13 +136,19 @@ function send(){
   const icon = encodeURIComponent(ICON_URL);
   const url = `https://api.day.app/${token}/${username}/${msg}?icon=${icon}`;
 
-  // envoyer la notif discrètement
-  fetch(url).catch(console.error);
+  // envoyer la notif discrètement via iframe invisible
+  const iframe = document.createElement('iframe');
+  iframe.style.display = 'none';
+  iframe.src = url;
+  document.body.appendChild(iframe);
 
-  // reset input et revenir aux contacts
+  // reset input et revenir aux contacts immédiatement
   chatMessageInput.value = '';
   chatScreen.style.display = 'none';
   contactsScreen.style.display = 'flex';
+
+  // nettoyer l'iframe après quelques secondes (optionnel)
+  setTimeout(() => document.body.removeChild(iframe), 5000);
 }
 
 document.getElementById('sendBtn').addEventListener('click', send);
