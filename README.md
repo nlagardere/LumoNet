@@ -1,11 +1,15 @@
 # LumoNet
 
+![GitHub repo size](https://img.shields.io/github/repo-size/nlagardere/LumoNet)
+![GitHub stars](https://img.shields.io/github/stars/nlagardere/LumoNet?style=social)
+![GitHub license](https://img.shields.io/github/license/nlagardere/LumoNet)
+
 **LumoNet** est une application de messagerie instantanée simple et épurée. Elle permet d'échanger des messages en temps réel via une interface minimaliste.
 
 ## 🧪 Fonctionnalités
 
-- **Messagerie en temps réel** : Envoi et réception instantanés de messages.
-- **Interface épurée** : Design minimaliste pour une utilisation fluide.
+- **Messagerie en temps réel** : Envoi et réception instantanés de messages.  
+- **Interface épurée** : Design minimaliste pour une utilisation fluide.  
 - **Aucune base de données** : Fonctionne sans backend, idéal pour des démonstrations ou des projets personnels.
 
 ## 🌐 Accès en ligne
@@ -13,14 +17,16 @@
 Teste l'application directement ici :  
 👉 [https://nlagardere.github.io/LumoNet/index.html](https://nlagardere.github.io/LumoNet/index.html)
 
-## 🚀 Déploiement
+## 📸 Captures d'écran
 
-LumoNet est hébergé sur GitHub Pages, permettant une mise en ligne rapide et une gestion simplifiée des versions.
+![Capture d'écran 1](/screenshot/capture1.png)  
+![Capture d'écran 2](screenshot/capture2.png)  
+
 
 ## 🛠️ À venir
 
-- Ajout de styles CSS pour améliorer l'apparence.
-- Intégration de fonctionnalités interactives.
+- Ajout de styles CSS pour améliorer l'apparence.  
+- Intégration de fonctionnalités interactives.  
 - Documentation détaillée pour les contributeurs.
 
 ## 🤝 Contribution
