@@ -1,233 +1,154 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Zilo - Messagerie</title>
-  <style>
-    body {
-      margin:0;
-      font-family: Arial, sans-serif;
-      background:#e0f7fa;
-      overflow:hidden;
-      height:100vh;
-      display:flex;
-      flex-direction:column;
-    }
-
-    header {
-      padding:20px;
-      text-align:center;
-      background:#00796b;
-      color:white;
-      font-size:1.5em;
-    }
-
-    .screen {
-      flex:1;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:center;
-      width:100%;
-      position:relative;
-    }
-
-    /* --- Destinataires plein écran --- */
-    .contacts {
-      display:grid;
-      grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
-      gap:20px;
-      width:90%;
-      max-width:600px;
-    }
-
-    .contact-card {
-      background:white;
-      padding:30px 10px;
-      border-radius:16px;
-      box-shadow:0 6px 18px rgba(0,0,0,0.08);
-      text-align:center;
-      cursor:pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-      font-size:1.2em;
-      font-weight:bold;
-      color:#00796b;
-    }
-
-    .contact-card:hover {
-      transform: translateY(-5px);
-      box-shadow:0 10px 25px rgba(0,0,0,0.15);
-    }
-
-    /* --- Chat --- */
-    .chat {
-      display:none;
-      flex-direction:column;
-      justify-content:flex-end;
-      height:100%;
-      width:100%;
-      padding:20px;
-      box-sizing:border-box;
-    }
-
-    .messages {
-      flex:1;
-      overflow-y:auto;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      margin-bottom:20px;
-    }
-
-    .message {
-      max-width:70%;
-      padding:10px 15px;
-      border-radius:16px;
-      background:#fff;
-      box-shadow:0 2px 8px rgba(0,0,0,0.05);
-    }
-
-    .message.me {
-      align-self:flex-end;
-      background:#00796b;
-      color:white;
-    }
-
-    .chat-input {
-      display:flex;
-      gap:10px;
-    }
-
-    .chat-input input {
-      flex:1;
-      padding:10px;
-      border-radius:16px;
-      border:1px solid #00796b;
-      font-size:16px;
-    }
-
-    .chat-input button {
-      padding:10px 20px;
-      border:none;
-      border-radius:16px;
-      background:#00796b;
-      color:white;
-      cursor:pointer;
-      transition:background 0.3s;
-    }
-
-    .chat-input button:hover { background:#004d40; }
-
-    .back-btn {
-      position:absolute;
-      top:20px;
-      left:20px;
-      padding:10px 15px;
-      border:none;
-      border-radius:16px;
-      background:#00796b;
-      color:white;
-      cursor:pointer;
-      transition: background 0.3s;
-    }
-
-    .back-btn:hover { background:#004d40; }
-
-    @media(max-width:500px){
-      .contact-card { padding:20px 5px; font-size:1em; }
-      .chat-input input { font-size:14px; }
-      .chat-input button { font-size:14px; padding:8px 12px; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Zilo - Messagerie</title>
+<style>
+body {margin:0;font-family:Arial,sans-serif;background:#e0f7fa;overflow:hidden;height:100vh;display:flex;flex-direction:column;}
+header {padding:20px;text-align:center;background:#00796b;color:white;font-size:1.5em;}
+.screen {flex:1;display:flex;flex-direction:column;justify-content:flex-start;align-items:center;width:100%;position:relative;padding-top:20px;box-sizing:border-box;}
+.add-contact {display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;justify-content:center;}
+.add-contact input {padding:10px;border-radius:16px;border:1px solid #00796b;font-size:16px;}
+.add-contact button {padding:10px 20px;border:none;border-radius:16px;background:#00796b;color:white;cursor:pointer;transition:background 0.3s;}
+.add-contact button:hover { background:#004d40; }
+.contacts {display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:20px;width:90%;max-width:600px;}
+.contact-card {background:white;padding:30px 10px;border-radius:16px;box-shadow:0 6px 18px rgba(0,0,0,0.08);text-align:center;cursor:pointer;transition: transform 0.2s, box-shadow 0.2s;font-size:1.2em;font-weight:bold;color:#00796b;}
+.contact-card:hover { transform: translateY(-5px); box-shadow:0 10px 25px rgba(0,0,0,0.15);}
+.chat {display:none;flex-direction:column;justify-content:flex-end;height:100%;width:100%;padding:20px;box-sizing:border-box;}
+.messages {flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;margin-bottom:20px;width:100%;}
+.message {max-width:70%;padding:10px 15px;border-radius:16px;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.05);word-wrap: break-word;}
+.message.me {align-self:flex-end;background:#00796b;color:white;}
+.chat-input {display:flex;gap:10px;width:100%;}
+.chat-input input {flex:1;padding:10px;border-radius:16px;border:1px solid #00796b;font-size:16px;}
+.chat-input button {padding:10px 20px;border:none;border-radius:16px;background:#00796b;color:white;cursor:pointer;transition:background 0.3s;}
+.chat-input button:hover { background:#004d40; }
+.back-btn {position:absolute;top:20px;left:20px;padding:10px 15px;border:none;border-radius:16px;background:#00796b;color:white;cursor:pointer;transition: background 0.3s;}
+.back-btn:hover { background:#004d40; }
+@media(max-width:500px){
+.contact-card { padding:20px 5px; font-size:1em; }
+.chat-input input { font-size:14px; }
+.chat-input button { font-size:14px; padding:8px 12px; }
+.add-contact input { font-size:14px; padding:8px; }
+.add-contact button { font-size:14px; padding:8px 12px; }
+}
+</style>
 </head>
 <body>
 
 <header>Zilo</header>
 
+<!-- Contacts Screen -->
 <div class="screen" id="contactsScreen">
-  <div class="contacts">
-    <div class="contact-card" data-name="Denis">Denis</div>
-    <div class="contact-card" data-name="Nathan">Nathan</div>
-    <div class="contact-card" data-name="Alice">Alice</div>
-    <div class="contact-card" data-name="Bob">Bob</div>
+  <div class="add-contact">
+    <input type="text" id="newName" placeholder="Nom du contact" />
+    <input type="text" id="newToken" placeholder="Token Bark" />
+    <button id="addContactBtn">Ajouter</button>
   </div>
+  <div class="contacts" id="contactsList"></div>
 </div>
 
+<!-- Chat Screen -->
 <div class="screen chat" id="chatScreen">
   <button class="back-btn" id="backBtn">← Retour</button>
-  <h2 id="welcome"></h2> <!-- <== ici -->
+  <h2 id="welcome"></h2>
   <div class="messages" id="messages"></div>
   <div class="chat-input">
-    <input type="text" id="recipient" placeholder="Tape ton message ici !" />
+    <input type="text" id="chatMessage" placeholder="Tape ton message ici !" />
     <button id="sendBtn">Envoyer</button>
   </div>
 </div>
 
 <script>
-  const contactsScreen = document.getElementById('contactsScreen');
-  const chatScreen = document.getElementById('chatScreen');
-  const messagesContainer = document.getElementById('messages');
-  const chatMessage = document.getElementById('recipient');
-  const welcome = document.getElementById('welcome');
+const ICON_URL = "https://i.imgur.com/youricon.png"; // change ton icône
+const contactsList = document.getElementById('contactsList');
+const addNameInput = document.getElementById('newName');
+const addTokenInput = document.getElementById('newToken');
+const addContactBtn = document.getElementById('addContactBtn');
+const contactsScreen = document.getElementById('contactsScreen');
+const chatScreen = document.getElementById('chatScreen');
+const messagesContainer = document.getElementById('messages');
+const chatMessageInput = document.getElementById('chatMessage');
+const welcome = document.getElementById('welcome');
+const backBtn = document.getElementById('backBtn');
 
-  let currentRecipient = '';
+let contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+let currentRecipientToken = '';
+let currentRecipientName = '';
 
-  // Quand on clique sur une card, on ouvre le chat avec ce destinataire
-  document.querySelectorAll('.contact-card').forEach(card => {
-    card.addEventListener('click', () => {
-      currentRecipient = card.dataset.name.toLowerCase(); // correspond aux valeurs "denis", "nathan"
-      contactsScreen.style.display = 'none';
-      chatScreen.style.display = 'flex';
-      messagesContainer.innerHTML = '';
-      welcome.textContent = `Chat avec ${card.dataset.name}`;
-    });
+function renderContacts(){
+  contactsList.innerHTML = '';
+  contacts.forEach(contact => {
+    const card = document.createElement('div');
+    card.className = 'contact-card';
+    card.textContent = contact.name;
+    card.dataset.token = contact.token;
+    card.addEventListener('click', () => openChat(contact));
+    contactsList.appendChild(card);
   });
+}
 
-  // Bouton retour
-  document.getElementById('backBtn').addEventListener('click', () => {
-    chatScreen.style.display = 'none';
-    contactsScreen.style.display = 'flex';
-    currentRecipient = '';
-  });
+function openChat(contact){
+  currentRecipientToken = contact.token;
+  currentRecipientName = contact.name;
+  contactsScreen.style.display = 'none';
+  chatScreen.style.display = 'flex';
+  messagesContainer.innerHTML = '';
+  welcome.textContent = `Chat avec ${contact.name}`;
+}
 
-  // Ajouter un message localement dans le chat
-  function addMessage(text, me=true){
-    const msgDiv = document.createElement('div');
-    msgDiv.className = 'message ' + (me ? 'me' : '');
-    msgDiv.textContent = text;
-    messagesContainer.appendChild(msgDiv);
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-  }
+addContactBtn.addEventListener('click', () => {
+  const name = addNameInput.value.trim();
+  const token = addTokenInput.value.trim();
+  if(!name || !token){ alert('Nom et token obligatoires !'); return; }
+  contacts.push({name, token});
+  localStorage.setItem('contacts', JSON.stringify(contacts));
+  addNameInput.value = '';
+  addTokenInput.value = '';
+  renderContacts();
+});
 
-  // Fonction d’envoi existante adaptée
-    async function send(){
-      const recipient = document.getElementById('recipient').value;
-      const message = chatMessage.value.trim();
-      if(!message){ alert('Écris un message !'); return; }
+backBtn.addEventListener('click', () => {
+  chatScreen.style.display = 'none';
+  contactsScreen.style.display = 'flex';
+  currentRecipientToken = '';
+  currentRecipientName = '';
+});
 
-      const res = await fetch('/api/send', {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ recipient, message })
-      });
-      const data = await res.json();
-      if(data.ok){
-        chatMessage.value = '';
-        alert('Notification envoyée !');
-      } else {
-        if(res.status === 401){
-          // non connecté → renvoie vers la connexion
-          window.location.href = '/login.html';
-        } else {
-          alert('Erreur : ' + (data.error||'inconnue'));
-        }
-      }
-    }
+function addMessage(text, me=true){
+  const msgDiv = document.createElement('div');
+  msgDiv.className = 'message ' + (me ? 'me' : '');
+  msgDiv.textContent = text;
+  messagesContainer.appendChild(msgDiv);
+  messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
 
+// Nouvelle fonction pour Bark
+function send(){
+  const message = chatMessageInput.value.trim();
+  if(!message || !currentRecipientToken) { alert('Écris un message !'); return; }
 
-  document.getElementById('sendBtn').addEventListener('click', send);
-  chatMessage.addEventListener('keydown', e => { if(e.key==='Enter') send(); });
+  addMessage(message,true);
 
+  const username = encodeURIComponent("Moi");
+  const token = encodeURIComponent(currentRecipientToken);
+  const msg = encodeURIComponent(message);
+  const icon = encodeURIComponent(ICON_URL);
+  const url = `https://api.day.app/${token}/${username}/${msg}?icon=${icon}`;
+
+  // envoyer la notif discrètement
+  fetch(url).catch(console.error);
+
+  // reset input et revenir aux contacts
+  chatMessageInput.value = '';
+  chatScreen.style.display = 'none';
+  contactsScreen.style.display = 'flex';
+}
+
+document.getElementById('sendBtn').addEventListener('click', send);
+chatMessageInput.addEventListener('keydown', e => { if(e.key==='Enter') send(); });
+
+renderContacts();
 </script>
 
 </body>
