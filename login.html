@@ -62,11 +62,14 @@
         nom => utilisateurs[nom] === tokenRecherche
       );
 
-      if (utilisateur) {
-        result.textContent = `✅ Connexion réussie : Bienvenue ${utilisateur}`;
-        result.style.color = "green";
-        window.location.href = "index.html"
-      } else {
+    if (utilisateur) {
+      result.textContent = `✅ Connexion réussie : Bienvenue ${utilisateur}`;
+      result.style.color = "green";
+      // redirection après 1,5 seconde
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 1500);
+    } else {
         result.textContent = "❌ Token invalide";
         result.style.color = "red";
       }
