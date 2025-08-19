@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Connexion — Zilo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      height:100vh;
+      background:#e0f7fa;
+    }
+    h1 { color:#00796b; margin-bottom: 12px; }
+    input, button {
+      margin:8px;
+      padding:10px;
+      font-size:16px;
+      border-radius:8px;
+      border:1px solid #00796b;
+    }
+    button {
+      background:#00796b;
+      color:#fff;
+      cursor:pointer;
+    }
+    button:hover { background:#004d40; }
+    .card {
+      background:#fff;
+      padding:24px;
+      border-radius:16px;
+      box-shadow:0 6px 18px rgba(0,0,0,0.08);
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Connexion</h1>
+    <input id="username" type="text" placeholder="Token d'accès" />
+    <button id="btnLogin">Se connecter</button>
+    <p id="result"></p>
+  </div>
+
+  <script>
+    const u = document.getElementById('username');
+    const b = document.getElementById('btnLogin');
+    const result = document.getElementById('result');
+
+    // Liste des utilisateurs + tokens
+    const utilisateurs = {
+      nathan: "xR7pQ2mD9tL4",
+      denis: "fK3vH8zN1wJ6",
+      estelle: "bT9yM4cX2qP7"
+    };
+
+    function login() {
+      const tokenRecherche = u.value.trim();
+      const utilisateur = Object.keys(utilisateurs).find(
+        nom => utilisateurs[nom] === tokenRecherche
+      );
+
+      if (utilisateur) {
+        result.textContent = `✅ Connexion réussie : Bienvenue ${utilisateur}`;
+        result.style.color = "green";
+        windows.location.href = "index.html"
+      } else {
+        result.textContent = "❌ Token invalide";
+        result.style.color = "red";
+      }
+    }
+
+    b.addEventListener('click', login);
+    u.addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+  </script>
+</body>
+</html>
