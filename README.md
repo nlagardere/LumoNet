@@ -19,8 +19,8 @@ Teste l'application directement ici :
 
 ## 📸 Captures d'écran
 
-![Capture d'écran 1](/screenshot/capture1.png)  
-![Capture d'écran 2](screenshot/capture2.png)  
+![Capture d'écran 1](capture1.png)  
+![Capture d'écran 2](capture2.png)  
 
 
 ## 🛠️ À venir
