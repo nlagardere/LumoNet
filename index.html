@@ -1,158 +1,391 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>LumoNet - Messagerie</title>
-<style>
-body {margin:0;font-family:Arial,sans-serif;background:#e0f7fa;overflow:hidden;height:100vh;display:flex;flex-direction:column;}
-header {padding:20px;text-align:center;background:#00796b;color:white;font-size:1.5em;}
-.screen {flex:1;display:flex;flex-direction:column;justify-content:flex-start;align-items:center;width:100%;position:relative;padding-top:20px;box-sizing:border-box;}
-.add-contact {display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;justify-content:center;}
-.add-contact input {padding:10px;border-radius:16px;border:1px solid #00796b;font-size:16px;}
-.add-contact button {padding:10px 20px;border:none;border-radius:16px;background:#00796b;color:white;cursor:pointer;transition:background 0.3s;}
-.add-contact button:hover { background:#004d40; }
-.contacts {display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:20px;width:90%;max-width:600px;}
-.contact-card {background:white;padding:30px 10px;border-radius:16px;box-shadow:0 6px 18px rgba(0,0,0,0.08);text-align:center;cursor:pointer;transition: transform 0.2s, box-shadow 0.2s;font-size:1.2em;font-weight:bold;color:#00796b;}
-.contact-card:hover { transform: translateY(-5px); box-shadow:0 10px 25px rgba(0,0,0,0.15);}
-.chat {display:none;flex-direction:column;justify-content:flex-end;height:100%;width:100%;padding:20px;box-sizing:border-box;}
-.messages {flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;margin-bottom:20px;width:100%;}
-.message {max-width:70%;padding:10px 15px;border-radius:16px;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.05);word-wrap: break-word;}
-.message.me {align-self:flex-end;background:#00796b;color:white;}
-.chat-input {display:flex;gap:10px;width:100%;}
-.chat-input input {flex:1;padding:10px;border-radius:16px;border:1px solid #00796b;font-size:16px;}
-.chat-input button {padding:10px 20px;border:none;border-radius:16px;background:#00796b;color:white;cursor:pointer;transition:background 0.3s;}
-.chat-input button:hover { background:#004d40; }
-.back-btn {position:absolute;top:20px;left:20px;padding:10px 15px;border:none;border-radius:16px;background:#00796b;color:white;cursor:pointer;transition: background 0.3s;}
-.back-btn:hover { background:#004d40; }
-@media(max-width:500px){
-.contact-card { padding:20px 5px; font-size:1em; }
-.chat-input input { font-size:14px; }
-.chat-input button { font-size:14px; padding:8px 12px; }
-.add-contact input { font-size:14px; padding:8px; }
-.add-contact button { font-size:14px; padding:8px 12px; }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LumoNet - Messagerie</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #e0f7fa;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 20px;
+      text-align: center;
+      background: #00796b;
+      color: white;
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+
+    .screen {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      position: relative;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .add-contact-btn {
+      margin-bottom: 20px;
+    }
+
+    .add-contact-btn button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 16px;
+      background: #00796b;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    .add-contact-btn button:hover {
+      background: #004d40;
+    }
+
+    .contacts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+      width: 90%;
+      max-width: 600px;
+    }
+
+    .contact-card {
+      background: white;
+      padding: 30px 10px;
+      border-radius: 16px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #00796b;
+      position: relative;
+    }
+
+    .contact-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    .contact-card .delete-btn {
+      position: absolute;
+      top: 5px;
+      right: 8px;
+      background: none;
+      border: none;
+      font-size: 1em;
+      color: red;
+      cursor: pointer;
+    }
+
+    .chat {
+      display: none;
+      flex-direction: column;
+      justify-content: flex-end;
+      height: 100%;
+      width: 100%;
+    }
+
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .message {
+      max-width: 70%;
+      padding: 10px 15px;
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      word-wrap: break-word;
+    }
+
+    .message.me {
+      align-self: flex-end;
+      background: #00796b;
+      color: white;
+    }
+
+    .chat-input {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 16px;
+      border: 1px solid #00796b;
+      font-size: 16px;
+    }
+
+    .chat-input button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 16px;
+      background: #00796b;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-weight: bold;
+    }
+
+    .chat-input button:hover {
+      background: #004d40;
+    }
+
+    .back-btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 16px;
+      background: #00796b;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .back-btn:hover {
+      background: #004d40;
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      z-index: 100;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .popup h2 {
+      margin-top: 0;
+    }
+
+    .popup input {
+      width: 80%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 16px;
+      border: 1px solid #00796b;
+      font-size: 16px;
+    }
+
+    .popup button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 16px;
+      background: #00796b;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .popup button:hover {
+      background: #004d40;
+    }
+
+    .popup .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 1.5em;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: #00796b;
+    }
+
+    @media(max-width:500px) {
+      .contact-card { padding: 20px 5px; font-size: 1em; }
+      .chat-input input, .chat-input button, .popup input { font-size: 14px; padding: 8px; }
+    }
+  </style>
 </head>
 <body>
 
 <header>LumoNet</header>
 
-<!-- Contacts Screen -->
+<!-- Popup ajout contact -->
+<div class="popup" id="popupAddContact">
+  <button class="close-btn" onclick="popupAddContact.style.display='none'">×</button>
+  <h2>Ajouter un contact</h2>
+  <input type="text" id="popupName" placeholder="Nom du contact">
+  <input type="text" id="popupToken" placeholder="Token Bark">
+  <br>
+  <button id="popupAddBtn">Ajouter</button>
+</div>
+
+<!-- Écran contacts -->
 <div class="screen" id="contactsScreen">
-  <div class="add-contact">
-    <input type="text" id="newName" placeholder="Nom du contact" />
-    <input type="text" id="newToken" placeholder="Token Bark" />
-    <button id="addContactBtn">Ajouter</button>
+  <div class="add-contact-btn">
+    <button onclick="popupAddContact.style.display='block'" title="Ajouter contact">➕ Ajouter un contact</button>
   </div>
   <div class="contacts" id="contactsList"></div>
 </div>
 
-<!-- Chat Screen -->
+<!-- Écran chat -->
 <div class="screen chat" id="chatScreen">
   <button class="back-btn" id="backBtn">← Retour</button>
   <h2 id="welcome"></h2>
   <div class="messages" id="messages"></div>
   <div class="chat-input">
-    <input type="text" id="chatMessage" placeholder="Tape ton message ici !" />
+    <input type="text" id="chatMessage" placeholder="Tape ton message ici !">
     <button id="sendBtn">Envoyer</button>
   </div>
 </div>
 
 <script>
-const ICON_URL = "https://i.imgur.com/youricon.png"; // change ton icône
-const contactsList = document.getElementById('contactsList');
-const addNameInput = document.getElementById('newName');
-const addTokenInput = document.getElementById('newToken');
-const addContactBtn = document.getElementById('addContactBtn');
-const contactsScreen = document.getElementById('contactsScreen');
-const chatScreen = document.getElementById('chatScreen');
-const messagesContainer = document.getElementById('messages');
-const chatMessageInput = document.getElementById('chatMessage');
-const welcome = document.getElementById('welcome');
-const backBtn = document.getElementById('backBtn');
+  const ICON_URL = "https://i.imgur.com/youricon.png";
 
-let contacts = JSON.parse(localStorage.getItem('contacts')) || [];
-let currentRecipientToken = '';
-let currentRecipientName = '';
+  // Vérifier si l'utilisateur connecté est défini
+  if (!localStorage.getItem('currentUserName')) {
+    const username = prompt("Entrez votre nom d'utilisateur :");
+    localStorage.setItem('currentUserName', username || "Utilisateur");
+  }
 
-function renderContacts(){
-  contactsList.innerHTML = '';
-  contacts.forEach(contact => {
-    const card = document.createElement('div');
-    card.className = 'contact-card';
-    card.textContent = contact.name;
-    card.dataset.token = contact.token;
-    card.addEventListener('click', () => openChat(contact));
-    contactsList.appendChild(card);
+  const currentUser = encodeURIComponent(localStorage.getItem('currentUserName'));
+
+  let contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+  let currentRecipientToken = '';
+  let currentRecipientName = '';
+
+  const contactsList = document.getElementById('contactsList');
+  const contactsScreen = document.getElementById('contactsScreen');
+  const chatScreen = document.getElementById('chatScreen');
+  const messagesContainer = document.getElementById('messages');
+  const chatMessageInput = document.getElementById('chatMessage');
+  const welcome = document.getElementById('welcome');
+  const backBtn = document.getElementById('backBtn');
+
+  // Popup
+  const popupAddContact = document.getElementById('popupAddContact');
+  const popupName = document.getElementById('popupName');
+  const popupToken = document.getElementById('popupToken');
+  const popupAddBtn = document.getElementById('popupAddBtn');
+
+  function renderContacts() {
+    contactsList.innerHTML = '';
+    contacts.forEach((contact, index) => {
+      const card = document.createElement('div');
+      card.className = 'contact-card';
+      card.textContent = contact.name;
+      card.dataset.token = contact.token;
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = "×";
+      deleteBtn.className = "delete-btn";
+      deleteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        contacts.splice(index, 1);
+        localStorage.setItem('contacts', JSON.stringify(contacts));
+        renderContacts();
+      });
+      card.appendChild(deleteBtn);
+
+      card.addEventListener('click', () => openChat(contact));
+      contactsList.appendChild(card);
+    });
+  }
+
+  function openChat(contact) {
+    currentRecipientToken = contact.token;
+    currentRecipientName = contact.name;
+    contactsScreen.style.display = 'none';
+    chatScreen.style.display = 'flex';
+    messagesContainer.innerHTML = '';
+    welcome.textContent = `Chat avec ${contact.name}`;
+  }
+
+  function addMessage(text, me = true) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'message ' + (me ? 'me' : '');
+    msgDiv.textContent = text;
+    messagesContainer.appendChild(msgDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+
+  function sendMessage() {
+    const message = chatMessageInput.value.trim();
+    if (!message || !currentRecipientToken) { alert('Écris un message !'); return; }
+    addMessage(message, true);
+
+    const token = encodeURIComponent(currentRecipientToken);
+    const msg = encodeURIComponent(message);
+    const icon = encodeURIComponent(ICON_URL);
+    const url = `https://api.day.app/${token}/${currentUser}/${msg}?icon=${icon}`;
+
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.src = url;
+    document.body.appendChild(iframe);
+
+    chatMessageInput.value = '';
+    setTimeout(() => document.body.removeChild(iframe), 5000);
+  }
+
+  popupAddBtn.addEventListener('click', () => {
+    const name = popupName.value.trim();
+    const token = popupToken.value.trim();
+    if (!name || !token) { alert('Nom et token obligatoires !'); return; }
+
+    contacts.push({ name, token });
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+    popupName.value = '';
+    popupToken.value = '';
+    popupAddContact.style.display = 'none';
+    renderContacts();
+
+    // Notification Bark
+    const msg = encodeURIComponent(`Le contact ${name} a été ajouté par ${currentUser} ! ✅`);
+    const icon = encodeURIComponent(ICON_URL);
+    const url = `https://api.day.app/${token}/${currentUser}/${msg}?icon=${icon}`;
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.src = url;
+    document.body.appendChild(iframe);
+    setTimeout(() => document.body.removeChild(iframe), 5000);
   });
-}
 
-function openChat(contact){
-  currentRecipientToken = contact.token;
-  currentRecipientName = contact.name;
-  contactsScreen.style.display = 'none';
-  chatScreen.style.display = 'flex';
-  messagesContainer.innerHTML = '';
-  welcome.textContent = `Chat avec ${contact.name}`;
-}
+  backBtn.addEventListener('click', () => {
+    chatScreen.style.display = 'none';
+    contactsScreen.style.display = 'flex';
+    currentRecipientToken = '';
+    currentRecipientName = '';
+  });
 
-addContactBtn.addEventListener('click', () => {
-  const name = addNameInput.value.trim();
-  const token = addTokenInput.value.trim();
-  if(!name || !token){ alert('Nom et token obligatoires !'); return; }
-  contacts.push({name, token});
-  localStorage.setItem('contacts', JSON.stringify(contacts));
-  addNameInput.value = '';
-  addTokenInput.value = '';
+  chatMessageInput.addEventListener('keydown', e => { if (e.key === 'Enter') sendMessage(); });
+  document.getElementById('sendBtn').addEventListener('click', sendMessage);
+
   renderContacts();
-});
-
-backBtn.addEventListener('click', () => {
-  chatScreen.style.display = 'none';
-  contactsScreen.style.display = 'flex';
-  currentRecipientToken = '';
-  currentRecipientName = '';
-});
-
-function addMessage(text, me=true){
-  const msgDiv = document.createElement('div');
-  msgDiv.className = 'message ' + (me ? 'me' : '');
-  msgDiv.textContent = text;
-  messagesContainer.appendChild(msgDiv);
-  messagesContainer.scrollTop = messagesContainer.scrollHeight;
-}
-
-
-const currentUserName = localStorage.getItem('currentUserName');
-// Nouvelle fonction pour Bark
-function send(){
-  const message = chatMessageInput.value.trim();
-  if(!message || !currentRecipientToken) { alert('Écris un message !'); return; }
-
-  addMessage(message,true);
-
-  const username = encodeURIComponent(currentUserName); // <-- nom du connecté
-  const token = encodeURIComponent(currentRecipientToken);
-  const msg = encodeURIComponent(message);
-  const icon = encodeURIComponent(ICON_URL);
-  const url = `https://api.day.app/${token}/${username}/${msg}?icon=${icon}`;
-
-  const iframe = document.createElement('iframe');
-  iframe.style.display = 'none';
-  iframe.src = url;
-  document.body.appendChild(iframe);
-
-  chatMessageInput.value = '';
-  chatScreen.style.display = 'none';
-  contactsScreen.style.display = 'flex';
-
-  setTimeout(() => document.body.removeChild(iframe), 5000);
-}
-document.getElementById('sendBtn').addEventListener('click', send);
-chatMessageInput.addEventListener('keydown', e => { if(e.key==='Enter') send(); });
-
-renderContacts();
 </script>
 
 </body>
