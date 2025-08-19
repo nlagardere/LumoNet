@@ -1,8 +1,8 @@
 # LumoNet
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/nlagardere/LumoNet)
-![GitHub stars](https://img.shields.io/github/stars/nlagardere/LumoNet?style=social)
-![GitHub license](https://img.shields.io/github/license/nlagardere/LumoNet)
+![Stars](https://img.shields.io/github/stars/nlagardere/LumoNet?style=for-the-badge&logo=github&color=green)
+![License](https://img.shields.io/github/license/nlagardere/LumoNet?style=for-the-badge&color=blue)
 
 **LumoNet** est une application de messagerie instantanée simple et épurée. Elle permet d'échanger des messages en temps réel via une interface minimaliste.
 
