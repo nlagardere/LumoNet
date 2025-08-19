@@ -65,6 +65,9 @@
     if (utilisateur) {
       result.textContent = `✅ Connexion réussie : Bienvenue ${utilisateur}`;
       result.style.color = "green";
+
+
+     localStorage.setItem('currentUserName', utilisateur);  
       // redirection après 1,5 seconde
       setTimeout(() => {
         window.location.href = "index.html";
