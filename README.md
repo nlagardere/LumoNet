@@ -28,6 +28,7 @@ Teste l'application directement ici :
 - Ajout de styles CSS pour améliorer l'apparence.  
 - Intégration de fonctionnalités interactives.  
 - Documentation détaillée pour les contributeurs.
+- Support de plusieurs langes (anglais prioritairement)
 
 ## 🤝 Contribution
 
