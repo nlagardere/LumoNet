@@ -123,6 +123,8 @@ function addMessage(text, me=true){
   messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }
 
+
+const currentUserName = localStorage.getItem('currentUserName');
 // Nouvelle fonction pour Bark
 function send(){
   const message = chatMessageInput.value.trim();
