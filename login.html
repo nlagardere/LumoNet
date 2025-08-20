@@ -42,12 +42,13 @@
       margin-bottom: 12px;
       object-fit: cover;
       border: 2px solid #00796b;
+      display: none; /* caché par défaut */
     }
   </style>
 </head>
 <body>
   <div class="card">
-    <img id="avatarPreview" class="avatar" src="https://i.imgur.com/placeholder.png" alt="Avatar" />
+    <img id="avatarPreview" class="avatar" alt="Avatar" />
     <h1>Connexion</h1>
     <input id="username" type="text" placeholder="Prénom" />
     <button id="btnLogin">Se connecter</button>
@@ -60,7 +61,6 @@
     const result = document.getElementById('result');
     const avatarPreview = document.getElementById('avatarPreview');
 
-    // Liste des utilisateurs + tokens + avatars
     const utilisateurs = {
       nathan: { token: "nathan", avatar: "https://www.travelandtourworld.com/wp-content/uploads/2025/04/KLM-Royal-Dutch-2.jpg" },
       denis: { token: "denis", avatar: "" },
@@ -79,11 +79,9 @@
         result.textContent = `✅ Connexion réussie : Bienvenue ${utilisateur}`;
         result.style.color = "green";
 
-        // Enregistrer nom et avatar dans le localStorage
         localStorage.setItem('currentUserName', utilisateur);
         localStorage.setItem('currentUserAvatar', userData.avatar);
 
-        // Redirection après 1,5 seconde
         setTimeout(() => {
           window.location.href = "index.html";
         }, 1500);
@@ -96,25 +94,19 @@
     b.addEventListener('click', login);
     u.addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
 
-// On vide la source au départ
-avatarPreview.src = ""; // ou ne pas définir src dans le HTML
+    u.addEventListener('input', () => {
+      const tokenRecherche = u.value.trim();
+      const utilisateur = Object.keys(utilisateurs).find(
+        nom => utilisateurs[nom].token === tokenRecherche
+      );
 
-// Mettre à jour l'avatar si l'utilisateur tape un token correct
-u.addEventListener('input', () => {
-  const tokenRecherche = u.value.trim();
-  const utilisateur = Object.keys(utilisateurs).find(
-    nom => utilisateurs[nom].token === tokenRecherche
-  );
-  
-  if (tokenRecherche === "") {
-    // Pas de token saisi → on ne met rien
-    avatarPreview.src = "";
-  } else if (utilisateur) {
-    avatarPreview.src = utilisateurs[utilisateur].avatar;
-  } else {
-    avatarPreview.src = "https://i.postimg.cc/MKKbzJbY/default-avatar.jpg";
-  }
-});
+      if (utilisateur && utilisateurs[utilisateur].avatar) {
+        avatarPreview.src = utilisateurs[utilisateur].avatar;
+        avatarPreview.style.display = "block"; // afficher l'avatar
+      } else {
+        avatarPreview.style.display = "none"; // cacher si pas trouvé ou pas d'avatar
+      }
+    });
   </script>
 </body>
 </html>
