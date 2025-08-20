@@ -276,8 +276,7 @@ const utilisateurs = {
 // Récupérer ou définir l'utilisateur actuel
 let currentUserName = localStorage.getItem('currentUserName');
 if (!currentUserName) {
-  currentUserName = prompt("Entrez votre nom d'utilisateur :") || "Utilisateur";
-  localStorage.setItem('currentUserName', currentUserName);
+  window.location.href ="login.html";
 }
 
 // Normaliser le nom pour correspondre aux clés utilisateurs
