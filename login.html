@@ -96,15 +96,25 @@
     b.addEventListener('click', login);
     u.addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
 
-    // Mettre à jour l'avatar si l'utilisateur tape un token correct
-    u.addEventListener('input', () => {
-      const tokenRecherche = u.value.trim();
-      const utilisateur = Object.keys(utilisateurs).find(
-        nom => utilisateurs[nom].token === tokenRecherche
-      );
-      if (utilisateur) avatarPreview.src = utilisateurs[utilisateur].avatar;
-      else avatarPreview.src = "https://i.postimg.cc/MKKbzJbY/default-avatar.jpg";
-    });
+// On vide la source au départ
+avatarPreview.src = ""; // ou ne pas définir src dans le HTML
+
+// Mettre à jour l'avatar si l'utilisateur tape un token correct
+u.addEventListener('input', () => {
+  const tokenRecherche = u.value.trim();
+  const utilisateur = Object.keys(utilisateurs).find(
+    nom => utilisateurs[nom].token === tokenRecherche
+  );
+  
+  if (tokenRecherche === "") {
+    // Pas de token saisi → on ne met rien
+    avatarPreview.src = "";
+  } else if (utilisateur) {
+    avatarPreview.src = utilisateurs[utilisateur].avatar;
+  } else {
+    avatarPreview.src = "https://i.postimg.cc/MKKbzJbY/default-avatar.jpg";
+  }
+});
   </script>
 </body>
 </html>
