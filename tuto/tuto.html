@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LumoNet - Tutoriel</title>
+
+  <style>
+    @font-face {
+      font-family: 'LumoNet';
+      src: url('../font.otf') format('opentype');
+    }
+
+    body {
+      margin: 0;
+      font-family: LumoNet, "Segoe UI", Roboto, sans-serif;
+      background: url('https://media.idownloadblog.com/wp-content/uploads/2025/06/iOS-26-Wallpaper-by-iSpazio-for-iPhone.jpg') no-repeat center center fixed;
+      background-size: cover;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      color: #fff;
+    }
+
+    /* ------------------- Header ------------------- */
+    header {
+      padding: 20px;
+      text-align: center;
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #fff;
+      background: rgba(0,128,128,0.3);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    /* ------------------- Screens ------------------- */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+
+    /* ------------------- Glass Card ------------------- */
+    .glass-card {
+      width: 90%;
+      max-width: 700px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      padding: 20px;
+      margin: 15px 0;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      color: #fff;
+      position: relative;
+      transition: transform 0.2s;
+    }
+
+    .glass-card:hover {
+      transform: translateY(-5px);
+    }
+
+    /* ------------------- Lists ------------------- */
+    ol, ul {
+      text-align: left;
+      margin: 15px auto;
+      padding-left: 20px;
+    }
+
+    li {
+      margin: 10px 0;
+      line-height: 1.6;
+    }
+
+    /* ------------------- Buttons ------------------- */
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 25px;
+      background: rgba(0,128,128,0.8);
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin: 10px 5px 0;
+      text-decoration: none;
+    }
+
+    .button:hover {
+      background: rgba(0,128,128,1);
+    }
+
+    /* ------------------- Footer ------------------- */
+    footer {
+      text-align: center;
+      padding: 10px;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(10px);
+      font-size: 0.9em;
+    }
+
+    /* ------------------- Code Links ------------------- */
+    .link {
+      color: #000000;
+      text-decoration: none;
+      font-family: monospace;
+      font-weight: 800;
+      background: rgba(255,255,255,0.2);
+      padding: 5px 10px;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+
+    .token {
+      color: #ff4500;
+      font-weight: 1500;
+    }
+  </style>
+</head>
+<body>
+
+  <header>LumoNet - Tutoriel 🚀</header>
+
+  <main>
+    <div class="glass-card">
+      <h2>Bienvenue</h2>
+      <p>LumoNet est un système de messagerie instantanée simple et rapide, conçu pour fonctionner sans serveur dédié.  
+      Actuellement, il utilise l’application <strong>Bark</strong> sur iOS pour l’envoi et la réception de notifications push.  
+      Une version Android est en préparation.</p>
+    </div>
+
+    <div class="glass-card">
+      <h2>Prise en main</h2>
+      <ol>
+        <li>Installez l’application <a class="button" href="https://apps.apple.com/app/bark-custom-notifications/id1403753865" target="_blank" rel="noopener noreferrer">Bark</a> sur votre appareil iOS.</li>
+        <li>Ouvrez <a class="button" href="https://nlagardere.github.io/lumonet/" target="_blank" rel="noopener noreferrer">LumoNet</a> dans votre navigateur.</li>
+        <li>Connectez-vous avec votre prénom.  
+        Pour ajouter votre compte, contactez le développeur :  
+        <a class="button" href="mailto:8hqadvig48@pomail.net">Envoyer un mail</a> (8hqadvig48@pomail.net)</li>
+        <li>Ajoutez vos contacts en leur demandant leur token Bark.  
+        Dans l’app Bark, le lien ressemble à :  
+        <code class="link">https://api.day.app/<strong class="token">whdgfie3ShdgGTDkd48df2D</strong>/Body Text</code></li>
+        <li>Commencez à envoyer et recevoir des messages instantanément.</li>
+      </ol>
+    </div>
+
+    <div class="glass-card">
+      <h2>Fonctionnalités principales</h2>
+      <ul>
+        <li>Messagerie instantanée sans serveur.</li>
+        <li>Notifications push grâce à Bark (iOS).</li>
+        <li>Interface simple et accessible depuis un navigateur.</li>
+        <li>Support prévu pour Android prochainement.</li>
+      </ul>
+    </div>
+
+    <div class="glass-card">
+      <h2>Support</h2>
+      <p>En cas de problème ou de question, vous pouvez consulter la <a class="button" href="https://nlagardere.github.io/lumonet/" target="_blank" rel="noopener noreferrer">page officielle</a> de LumoNet.</p>
+    </div>
+
+    <div class="glass-card">
+      <h2>Feedback</h2>
+      <p>Vos retours sont précieux ! Vous pouvez partager vos suggestions d’amélioration via la page de contact de LumoNet.</p>
+    </div>
+
+    <div class="glass-card">
+      <h2>Conclusion</h2>
+      <p>Merci d’utiliser LumoNet. Ce projet est en constante évolution, et vos retours aideront à le rendre encore meilleur.  
+      Bonne utilisation !</p>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2025 LumoNet. Tous droits réservés.
+  </footer>
+
+</body>
+</html>
