@@ -34,6 +34,10 @@
       box-sizing: border-box;
     }
 
+    .add-contact-btn {
+      margin-bottom: 20px;
+    }
+
     .add-contact-btn button {
       padding: 10px 20px;
       border: none;
@@ -235,7 +239,7 @@
   <button class="close-btn" onclick="popupAddContact.style.display='none'">×</button>
   <h2>Ajouter un contact</h2>
   <input type="text" id="popupName" placeholder="Nom du contact">
-  <input type="text" id="popupToken" placeholder="Lumo">
+  <input type="text" id="popupToken" placeholder="Token Bark">
   <br>
   <button id="popupAddBtn">Ajouter</button>
 </div>
@@ -260,14 +264,29 @@
 </div>
 
 <script>
-let currentUserName = localStorage.getItem('currentUserName');
-let currentUserAvatar = localStorage.getItem('currentUserAvatar') || "https://i.postimg.cc/MKKbzJbY/default-avatar.jpg";
+const ICON_URL = "https://i.imgur.com/youricon.png";
 
+// Liste des utilisateurs + avatars
+const utilisateurs = {
+  nathan: "https://i.postimg.cc/MKKbzJbY/default-avatar.jpg",
+  denis: "https://i.postimg.cc/MKKbzJbY/default-avatar.jpg",
+  estelle: "https://i.postimg.cc/MKKbzJbY/default-avatar.jpg"
+};
+
+// Récupérer ou définir l'utilisateur actuel
+let currentUserName = localStorage.getItem('currentUserName');
 if (!currentUserName) {
-  window.location.href = "login.html";
+  currentUserName = prompt("Entrez votre nom d'utilisateur :") || "Utilisateur";
+  localStorage.setItem('currentUserName', currentUserName);
 }
 
-const currentUser = encodeURIComponent(currentUserName.toLowerCase());
+// Normaliser le nom pour correspondre aux clés utilisateurs
+const currentUserKey = currentUserName.toLowerCase();
+let currentUserAvatar = utilisateurs[currentUserKey] || "https://i.postimg.cc/MKKbzJbY/default-avatar.jpg";
+localStorage.setItem('currentUserAvatar', currentUserAvatar);
+
+// Utilisateur encodé pour URL Day.app
+const currentUser = encodeURIComponent(currentUserKey);
 
 let contacts = JSON.parse(localStorage.getItem('contacts')) || [];
 let currentRecipientToken = '';
@@ -281,6 +300,7 @@ const chatMessageInput = document.getElementById('chatMessage');
 const welcome = document.getElementById('welcome');
 const backBtn = document.getElementById('backBtn');
 
+// Popup ajout contact
 const popupAddContact = document.getElementById('popupAddContact');
 const popupName = document.getElementById('popupName');
 const popupToken = document.getElementById('popupToken');
@@ -346,6 +366,7 @@ function sendMessage() {
   setTimeout(() => document.body.removeChild(iframe), 5000);
 }
 
+// Ajouter un contact via popup
 popupAddBtn.addEventListener('click', () => {
   const name = popupName.value.trim();
   const token = popupToken.value.trim();
@@ -358,6 +379,7 @@ popupAddBtn.addEventListener('click', () => {
   popupAddContact.style.display = 'none';
   renderContacts();
 
+  // Notification Bark avec avatar de l'utilisateur actuel
   const msg = encodeURIComponent(`Le contact ${name} a été ajouté par ${currentUserName} ! ✅`);
   const icon = encodeURIComponent(currentUserAvatar);
   const url = `https://api.day.app/${token}/${currentUser}/${msg}?icon=${icon}`;
@@ -368,6 +390,7 @@ popupAddBtn.addEventListener('click', () => {
   setTimeout(() => document.body.removeChild(iframe), 5000);
 });
 
+// Bouton retour
 backBtn.addEventListener('click', () => {
   chatScreen.style.display = 'none';
   contactsScreen.style.display = 'flex';
@@ -375,10 +398,13 @@ backBtn.addEventListener('click', () => {
   currentRecipientName = '';
 });
 
+// Envoyer message avec Enter
 chatMessageInput.addEventListener('keydown', e => { if (e.key === 'Enter') sendMessage(); });
 document.getElementById('sendBtn').addEventListener('click', sendMessage);
 
 renderContacts();
+
+
 </script>
 
 </body>
