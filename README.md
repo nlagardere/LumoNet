@@ -15,17 +15,12 @@
 ## 🌐 Accès en ligne
 
 Teste l'application directement ici :  
-👉 [https://nlagardere.github.io/LumoNet/index.html](https://nlagardere.github.io/LumoNet/index.html)
-
-## 📸 Captures d'écran
-
-![Capture d'écran 1](capture1.png)  
-![Capture d'écran 2](capture2.png)  
-
+👉 [https://nlagardere.github.io/LumoNet/index.html](https://nlagardere.github.io/LumoNet/
 
 ## 🛠️ À venir
 
-- Ajout de styles CSS pour améliorer l'apparence.  
+- Ajout de support en cas de probleme
+- Integration sur Androud 
 - Intégration de fonctionnalités interactives.  
 - Documentation détaillée pour les contributeurs.
 - Support de plusieurs langes (anglais prioritairement)
